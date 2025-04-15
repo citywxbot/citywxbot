@@ -1,0 +1,15 @@
+import requests
+import os
+
+# Your OpenWeatherMap API key
+OWM_API_KEY = os.getenv("OWM_API_KEY")
+
+# Example city_id for Los Angeles
+city_id = "5368361"  # Los Angeles
+
+# Make API call
+url = f"http://api.openweathermap.org/data/2.5/weather?id={city_id}&appid={OWM_API_KEY}&units=metric"
+response = requests.get(url)
+
+# Print the API response to check if it's working
+print(response.json())
