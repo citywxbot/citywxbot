@@ -1,5 +1,4 @@
 name: Daily Weather Bot
-
 on:
   schedule:
     - cron: "0 17 * * 1"  # Monday 10:00 AM PT
@@ -10,36 +9,23 @@ on:
     - cron: "0 17 * * 6"  # Saturday 10:00 AM PT
     - cron: "0 17 * * 0"  # Sunday 10:00 AM PT
   workflow_dispatch:
-
 jobs:
   tweet:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
-
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-
     - name: Install dependencies
       run: pip install -r requirements.txt
-
-    - name: Print secrets
-      run: |
-        echo "OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}"
-        echo "API_KEY: ${{ secrets.API_KEY }}"
-        echo "API_KEY_SECRET: ${{ secrets.API_KEY_SECRET }}"
-        echo "ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}"
-        echo "ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}"
-
     - name: Run weather bot
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        TWITTER_API_KEY: ${{ secrets.API_KEY }}
-        TWITTER_API_SECRET: ${{ secrets.API_KEY_SECRET }}
-        TWITTER_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        TWITTER_ACCESS_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+        API_KEY: ${{ secrets.API_KEY }}
+        API_KEY_SECRET: ${{ secrets.API_KEY_SECRET }}
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
       run: python weather_bot.py
