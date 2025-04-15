@@ -9,6 +9,12 @@ TWITTER_API_SECRET = os.getenv("API_KEY_SECRET")  # Secret for Twitter API Key S
 TWITTER_ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")  # Secret for Twitter Access Token
 TWITTER_ACCESS_SECRET = os.getenv("ACCESS_TOKEN_SECRET")  # Secret for Twitter Access Token Secret
 
+# Debugging step to verify keys are correctly loaded
+print(f"API Key: {TWITTER_API_KEY}")
+print(f"API Secret: {TWITTER_API_SECRET}")
+print(f"Access Token: {TWITTER_ACCESS_TOKEN}")
+print(f"Access Token Secret: {TWITTER_ACCESS_SECRET}")
+
 cities = {
     "Los Angeles": "5368361",
     "San Diego": "5391811",
@@ -35,20 +41,3 @@ def get_weather(city_id):
 
 def compose_tweet():
     lines = ["📍 Daily California Weather Update ☀️\n"]
-    for city, cid in cities.items():
-        forecast = get_weather(cid)
-        lines.append(f"{city}: {forecast}")
-    lines.append("\n#WeatherBot #CaliforniaWeather #DailyForecast")
-    return "\n".join(lines)
-
-def tweet_forecast():
-    auth = tweepy.OAuth1UserHandler(
-        TWITTER_API_KEY, TWITTER_API_SECRET,
-        TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET
-    )
-    api = tweepy.API(auth)
-    tweet = compose_tweet()
-    api.update_status(tweet)
-
-if __name__ == "__main__":
-    tweet_forecast()
