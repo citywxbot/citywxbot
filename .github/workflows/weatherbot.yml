@@ -2,7 +2,13 @@ name: Daily Weather Bot
 
 on:
   schedule:
-    - cron: "0 14 * * *"  # Runs daily at 14:00 UTC / 7:00 AM Pacific
+    - cron: "0 17 * * 1"  # Monday 10:00 AM PT
+    - cron: "0 16 * * 2"  # Tuesday 9:00 AM PT
+    - cron: "0 16 * * 3"  # Wednesday 9:00 AM PT
+    - cron: "0 16 * * 4"  # Thursday 9:00 AM PT
+    - cron: "0 16 * * 5"  # Friday 9:00 AM PT
+    - cron: "0 17 * * 6"  # Saturday 10:00 AM PT
+    - cron: "0 17 * * 0"  # Sunday 10:00 AM PT
   workflow_dispatch:
 
 jobs:
