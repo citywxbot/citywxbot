@@ -41,6 +41,21 @@ def get_weather(city_id):
 
 def compose_tweet():
     lines = ["📍 Daily California Weather Update ☀️\n"]
+    for city, cid in cities.items():
+        forecast = get_weather(cid)
+        lines.append(f"{city}: {forecast}")
+    lines.append("\n#WeatherBot #CaliforniaWeather #DailyForecast")
+    return "\n".join(lines)
 
+def tweet_forecast():
+    auth = tweepy.OAuth1UserHandler(
+        TWITTER_API_KEY, TWITTER_API_SECRET,
+        TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET
+    )
+    api = tweepy.API(auth)
+    tweet = compose_tweet()
+    api.update_status(tweet)
+
+# Ensure this is at the bottom of the script
 if __name__ == "__main__":
-    tweet_forecast() 
+    tweet_forecast()  # This ensures the bot posts a tweet when you run it
