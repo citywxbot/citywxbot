@@ -3,38 +3,39 @@ import tweepy
 import os
 
 # API keys stored in GitHub Secrets
-OWM_API_KEY = os.getenv("WEATHERBIT_API_KEY")  # Secret for Weatherbit API Key
+OWM_API_KEY = os.getenv("WEATHERSTACK_API_KEY")  # Secret for WeatherStack API Key
 TWITTER_API_KEY = os.getenv("API_KEY")  # Secret for Twitter API Key
 TWITTER_API_SECRET = os.getenv("API_KEY_SECRET")  # Secret for Twitter API Key Secret
 TWITTER_ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")  # Secret for Twitter Access Token
 TWITTER_ACCESS_SECRET = os.getenv("ACCESS_TOKEN_SECRET")  # Secret for Twitter Access Token Secret
 
 # Debugging step to verify keys are correctly loaded
-if not all([OWM_API_KEY, TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
-    print("⚠️ Missing API credentials. Please check your environment variables.")
+print(f"OWM API Key: {OWM_API_KEY}")
+print(f"Twitter API Key: {TWITTER_API_KEY}")
+print(f"Twitter API Secret: {TWITTER_API_SECRET}")
+print(f"Twitter Access Token: {TWITTER_ACCESS_TOKEN}")
+print(f"Twitter Access Token Secret: {TWITTER_ACCESS_SECRET}")
 
+# Cities and their codes
 cities = {
-    "Los Angeles": "5368361",
-    "San Diego": "5391811",
-    "San Jose": "5392171",
-    "San Francisco": "5391959",
-    "Fresno": "5350937",
-    "Sacramento": "5389489",
-    "Long Beach": "5367929",
-    "Oakland": "5378538",
-    "Bakersfield": "5325738",
-    "Anaheim": "5323810"
+    "Los Angeles": "Los Angeles",
+    "San Diego": "San Diego",
+    "San Jose": "San Jose",
+    "San Francisco": "San Francisco",
+    "Fresno": "Fresno",
+    "Sacramento": "Sacramento",
+    "Long Beach": "Long Beach",
+    "Oakland": "Oakland",
+    "Bakersfield": "Bakersfield",
+    "Anaheim": "Anaheim"
 }
 
 def get_weather(city_name):
-    # Weatherbit API endpoint for current weather
-    url = f"https://api.weatherbit.io/v2.0/current?city={city_name}&key={OWM_API_KEY}&units=M"
+    url = f"http://api.weatherstack.com/current?access_key={OWM_API_KEY}&query={city_name}"
     res = requests.get(url).json()
-    
-    if 'data' in res:
-        # Extract temperature and description
-        temp = round(res['data'][0]['temp'])
-        desc = res['data'][0]['weather']['description'].capitalize()
+    if 'current' in res:
+        temp = round(res['current']['temperature'])
+        desc = res['current']['weather_descriptions'][0].capitalize()
         return f"{temp}°C, {desc}"
     else:
         print(f"⚠️ Failed to get weather data: {res}")
@@ -42,7 +43,7 @@ def get_weather(city_name):
 
 def compose_tweet():
     lines = ["📍 Daily California Weather Update ☀️\n"]
-    for city in cities.keys():
+    for city in cities:
         forecast = get_weather(city)
         lines.append(f"{city}: {forecast}")
     lines.append("\n#WeatherBot #CaliforniaWeather #DailyForecast")
