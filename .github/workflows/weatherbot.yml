@@ -1,0 +1,33 @@
+name: Daily Weather Bot
+
+on:
+  schedule:
+    - cron: "0 14 * * *"  # Runs daily at 14:00 UTC / 7:00 AM Pacific
+  workflow_dispatch:
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run weather bot
+      env:
+        OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
+        TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+        TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+        TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+        TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
+      run: python weather_bot.py
+
+Add GitHub Actions workflow to run bot daily
