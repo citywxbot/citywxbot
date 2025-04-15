@@ -35,7 +35,6 @@ jobs:
         echo "ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}"
         echo "ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}"
 
-
     - name: Run weather bot
       env:
         OWM_API_KEY: ${{ secrets.OPENWEATHER }}
