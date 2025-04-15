@@ -48,5 +48,3 @@ def tweet_forecast():
 
 if __name__ == "__main__":
     tweet_forecast()
-
-Add main weather bot script for California cities
