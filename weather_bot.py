@@ -50,4 +50,20 @@ def compose_tweet():
 def tweet_forecast():
     # Ensure credentials are loaded
     if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
-        print("⚠
+        print("⚠️ Missing API credentials. Please check your environment variables.")
+        return
+
+    # Authenticate with Twitter
+    auth = tweepy.OAuth1UserHandler(
+        TWITTER_API_KEY, TWITTER_API_SECRET,
+        TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET
+    )
+    api = tweepy.API(auth)
+
+    # Create and send the tweet
+    tweet = compose_tweet()
+    api.update_status(tweet)
+
+# Ensure this is at the bottom of the script
+if __name__ == "__main__":
+    tweet_forecast()  # This ensures the bot posts a tweet when you run it
