@@ -25,7 +25,13 @@ cities = {
 def get_weather(city_id):
     url = f"http://api.openweathermap.org/data/2.5/weather?id={city_id}&appid={OWM_API_KEY}&units=metric"
     res = requests.get(url).json()
+    if 'main' in res:
     temp = round(res['main']['temp'])
+    return temp
+else:
+    print(f"⚠️ Failed to get weather data: {res}")
+    return "?"
+
     desc = res['weather'][0]['description'].capitalize()
     return f"{temp}°C, {desc}"
 
