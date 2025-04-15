@@ -27,14 +27,6 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt
 
-    - name: Print secrets
-      run: |
-        echo "WEATHERSTACK_API_KEY: ${{ secrets.WEATHERSTACK_API_KEY }}"
-        echo "TWITTER_API_KEY: ${{ secrets.API_KEY }}"
-        echo "TWITTER_API_SECRET: ${{ secrets.API_KEY_SECRET }}"
-        echo "TWITTER_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}"
-        echo "TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}"
-
     - name: Run weather bot
       env:
         WEATHERSTACK_API_KEY: ${{ secrets.WEATHERSTACK_API_KEY }}
@@ -42,4 +34,5 @@ jobs:
         TWITTER_API_SECRET: ${{ secrets.API_KEY_SECRET }}
         TWITTER_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: python weather_bot.py
