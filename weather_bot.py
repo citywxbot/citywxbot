@@ -41,3 +41,6 @@ def get_weather(city_id):
 
 def compose_tweet():
     lines = ["📍 Daily California Weather Update ☀️\n"]
+
+if __name__ == "__main__":
+    tweet_forecast() 
