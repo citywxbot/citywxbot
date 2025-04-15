@@ -27,6 +27,15 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt
 
+    - name: Print secrets
+      run: |
+        echo "OPENWEATHER: ${{ secrets.OPENWEATHER }}"
+        echo "API_KEY: ${{ secrets.API_KEY }}"
+        echo "API_KEY_SECRET: ${{ secrets.API_KEY_SECRET }}"
+        echo "ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}"
+        echo "ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}"
+
+
     - name: Run weather bot
       env:
         OWM_API_KEY: ${{ secrets.OPENWEATHER }}
