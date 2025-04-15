@@ -1,5 +1,5 @@
 import openai
-import tweepy
+import requests
 import os
 
 # API keys stored in GitHub Secrets
@@ -39,26 +39,55 @@ def generate_weather_tweet():
     
     return response.choices[0].message.content.strip()
 
-# Function to authenticate and post tweet
+# Function to get OAuth 2.0 bearer token
+def get_twitter_bearer_token():
+    url = "https://api.twitter.com/oauth2/token"
+    auth = (TWITTER_API_KEY, TWITTER_API_SECRET)
+    data = {'grant_type': 'client_credentials'}
+    response = requests.post(url, auth=auth, data=data)
+    
+    if response.status_code == 200:
+        return response.json()['access_token']
+    else:
+        print(f"Error getting bearer token: {response.status_code}")
+        print(response.text)
+        return None
+
+# Function to authenticate and post tweet using v2 API
 def tweet_forecast():
     # Ensure credentials are loaded
     if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
         print("⚠️ Missing API credentials. Please check your environment variables.")
         return
-        
-    # Authenticate with Twitter
-    auth = tweepy.OAuth1UserHandler(
-        TWITTER_API_KEY, TWITTER_API_SECRET,
-        TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET
-    )
-    api = tweepy.API(auth)
     
     # Generate the tweet using ChatGPT
-    tweet = generate_weather_tweet()
+    tweet_text = generate_weather_tweet()
     
-    # Post the tweet
-    api.update_status(tweet)
-    print("Tweet posted successfully!")
+    # Twitter API v2 endpoint for creating tweets
+    url = "https://api.twitter.com/2/tweets"
+    
+    # Get OAuth 1.0a authentication header
+    from requests_oauthlib import OAuth1
+    auth = OAuth1(
+        TWITTER_API_KEY,
+        TWITTER_API_SECRET,
+        TWITTER_ACCESS_TOKEN,
+        TWITTER_ACCESS_SECRET
+    )
+    
+    # Create payload for the tweet
+    payload = {"text": tweet_text}
+    
+    # Make the request to post the tweet
+    response = requests.post(url, json=payload, auth=auth)
+    
+    # Check if successful
+    if response.status_code == 201:
+        print("Tweet posted successfully!")
+        print(f"Tweet content: {tweet_text}")
+    else:
+        print(f"Error posting tweet: {response.status_code}")
+        print(response.text)
 
 # Run the bot when executed directly
 if __name__ == "__main__":
