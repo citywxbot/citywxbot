@@ -48,14 +48,6 @@ def compose_tweet():
     return "\n".join(lines)
 
 def tweet_forecast():
-    auth = tweepy.OAuth1UserHandler(
-        TWITTER_API_KEY, TWITTER_API_SECRET,
-        TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET
-    )
-    api = tweepy.API(auth)
-    tweet = compose_tweet()
-    api.update_status(tweet)
-
-# Ensure this is at the bottom of the script
-if __name__ == "__main__":
-    tweet_forecast()  # This ensures the bot posts a tweet when you run it
+    # Ensure credentials are loaded
+    if not all([TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET]):
+        print("⚠
